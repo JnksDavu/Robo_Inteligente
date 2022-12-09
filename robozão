@@ -1,0 +1,123 @@
+#include <SoftwareSerial.h>
+
+#define ENB 4
+#define ENA 7
+char option = "";
+
+SoftwareSerial portOne(9, 8);
+int incomingByte;
+char aux;
+
+void setup() {
+    // Set the baud rate for the Serial port
+    Serial.begin(9600);
+
+    // Set the baud rate for the SerialSoftware object
+    portOne.begin(9600);
+}
+
+void loop() {
+
+    readSensors(false); 
+    
+	  if (portOne.available() > 0) {
+    incomingByte = portOne.read();
+    aux = incomingByte;
+	  direcao(aux);
+  }
+       
+
+}
+void Bluetooh(){
+
+    pinMode(8, INPUT);
+    pinMode(9, OUTPUT);
+}
+
+
+  void direcao(int option) {
+  // Função para controle de motor com pre definições
+  
+   pinMode(2, OUTPUT);
+   pinMode(3, OUTPUT);
+   pinMode(4, OUTPUT);
+   pinMode(5, OUTPUT);
+   pinMode(6, OUTPUT);
+   pinMode(7, OUTPUT);
+
+
+    switch (option){
+    case '8': 
+    /* Frente */
+    digitalWrite (2, LOW);
+    digitalWrite (3, HIGH);
+    analogWrite (ENB, 130);
+
+    digitalWrite (5, HIGH);
+    digitalWrite (6, LOW);
+    analogWrite (ENA, 130);
+      break;
+      
+    case '2':  
+    /*Trás*/
+    digitalWrite (2, HIGH);
+    digitalWrite (3, LOW);
+    digitalWrite (ENB, 150);
+
+    digitalWrite (5, LOW);
+    digitalWrite (6, HIGH);
+    digitalWrite (ENA, 150);
+
+      break;
+      
+    case '6': 
+    /*Direita*/
+    digitalWrite (2, HIGH);
+    digitalWrite (3, LOW);
+    digitalWrite (ENB, 150);
+
+    digitalWrite (5, HIGH);
+    digitalWrite (6, LOW);
+    digitalWrite (ENA, 150);
+
+      break;
+      
+    case '4':  
+    /*Esquerda*/
+
+    digitalWrite (2, LOW);
+    digitalWrite (3, HIGH);
+    digitalWrite (ENB, 150);
+
+    digitalWrite (5, LOW);
+    digitalWrite (6, HIGH);
+    digitalWrite (ENA, 150);
+      break;
+
+    case '0':  
+    /*Esquerda*/
+
+    digitalWrite (2, LOW);
+    digitalWrite (3, HIGH);
+    digitalWrite (ENB, 0);
+
+    digitalWrite (5, LOW);
+    digitalWrite (6, HIGH);
+    digitalWrite (ENA, 0);
+      break;
+  }
+   
+}
+
+void readSensors(bool readSerial) {
+
+  if(readSerial == true){
+    Serial.print(' ');
+    Serial.print(analogRead(0));
+    Serial.print(' ');
+    Serial.print(analogRead(1));
+    Serial.print(' ');
+    Serial.println(analogRead(2));
+  }
+
+}
